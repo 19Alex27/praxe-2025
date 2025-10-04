@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    default: dev
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/demo
+    username: demo
+    password: demo
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:postgresql://postgres:5432/demo
+    username: demo
+    password: demo
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+aws:
+  endpoint: ${AWS_ENDPOINT:http://localhost:4566}
+  region: ${AWS_REGION:eu-central-1}
