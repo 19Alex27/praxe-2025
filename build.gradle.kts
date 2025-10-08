@@ -23,6 +23,12 @@ dependencies {
 
     testImplementation("io.cucumber:cucumber-java:7.15.0")
     testImplementation("io.cucumber:cucumber-junit-platform-engine:7.15.0")
+    implementation("org.flywaydb:flyway-core:10.22.0")
+    implementation("org.flywaydb:flyway-database-postgresql:10.22.0")
+
+    implementation("software.amazon.awssdk:s3:2.25.62")
+    implementation("software.amazon.awssdk:auth:2.25.62")
+    implementation("software.amazon.awssdk:url-connection-client:2.25.62") // <-- добавить
 }
 
 tasks.test { useJUnitPlatform() }

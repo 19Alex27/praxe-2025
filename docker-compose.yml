@@ -31,6 +31,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
       - AWS_ENDPOINT=http://localstack:4566
       - AWS_REGION=eu-central-1
+      
     depends_on:
       postgres:
         condition: service_healthy

@@ -1,5 +1,6 @@
-server:
+﻿server:
   port: 8080
+  address: 0.0.0.0
 
 spring:
   profiles:
@@ -16,7 +17,7 @@ spring:
     password: demo
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
 
 ---
@@ -30,9 +31,10 @@ spring:
     password: demo
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
 
 aws:
   endpoint: ${AWS_ENDPOINT:http://localhost:4566}
   region: ${AWS_REGION:eu-central-1}
+
