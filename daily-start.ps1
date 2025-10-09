@@ -4,6 +4,7 @@ $ErrorActionPreference = "Stop"
 
 function Ensure-Docker {
   Write-Host "🐳 Проверяю Docker Desktop..." -ForegroundColor Cyan
+  Start-Sleep -Seconds 5
   try { docker info | Out-Null; return } catch {}
   $dockerExe = Join-Path $env:ProgramFiles "Docker\Docker\Docker Desktop.exe"
   if (-not (Test-Path $dockerExe)) { throw "Docker Desktop не найден: $dockerExe" }
@@ -70,16 +71,23 @@ Write-Host "🚀 Запускаю приложение..." -ForegroundColor Cyan
 docker compose up -d app
 
 # 4) Ожидаем порт 8080 и проверяем API (через curl.exe)
-Write-Host "🔎 Проверяю API..." -ForegroundColor Cyan
-Start-Sleep -Seconds 3
-Invoke-WithRetry {
-  if (-not (Test-NetConnection -ComputerName localhost -Port 8080).TcpTestSucceeded) {
-    throw "8080 ещё не слушается"
-  }
-} -retries 30 -delaySec 1
+Write-Host "🔎 Проверяю API (жду health=UP)..." -ForegroundColor Cyan
 
-$hello = Curl-Json "http://localhost:8080/api/hello"
+# ждём /actuator/health → UP
+for ($i=1; $i -le 20; $i++) {
+  try {
+    $h = & curl.exe -sS http://localhost:8080/actuator/health
+    if ($LASTEXITCODE -eq 0 -and $h -like '*"status":"UP"*') {
+      Write-Host "HEALTH → $h" -ForegroundColor Green
+      break
+    }
+  } catch {}
+  Start-Sleep -Seconds 1
+}
+
+# затем уже рабочие эндпоинты
+$hello = & curl.exe -sS http://localhost:8080/api/hello
 Write-Host "GET /api/hello → $hello" -ForegroundColor Green
 
-$notes = Curl-Json "http://localhost:8080/api/notes"
+$notes = & curl.exe -sS http://localhost:8080/api/notes
 Write-Host "GET /api/notes → $notes" -ForegroundColor Green
