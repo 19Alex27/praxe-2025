@@ -1,0 +1,37 @@
+{
+  "family":"praxe-task",
+  "networkMode":"awsvpc",
+  "cpu":"256",
+  "memory":"512",
+  "requiresCompatibilities":["FARGATE"],
+  "executionRoleArn":"arn:aws:iam::960682159316:role/ecsTaskExecutionRole",
+  "containerDefinitions":[
+    {
+      "name":"praxe-demo",
+      "image":"960682159316.dkr.ecr.eu-central-1.amazonaws.com/praxe-demo:latest",
+      "portMappings":[{"containerPort":8080,"hostPort":8080,"protocol":"tcp"}],
+      "essential":true,
+      "logConfiguration":{
+        "logDriver":"awslogs",
+        "options":{
+          "awslogs-group":"/ecs/praxe-demo",
+          "awslogs-region":"eu-central-1",
+          "awslogs-stream-prefix":"praxe-demo"
+        }
+      },
+      "environment":[
+        {"name":"SPRING_DATASOURCE_URL","value":"jdbc:postgresql://praxe-postgres.c5myo8wessez.eu-central-1.rds.amazonaws.com:5432/postgres"},
+        {"name":"SPRING_DATASOURCE_USERNAME","value":"appuser"},
+        {"name":"SPRING_DATASOURCE_PASSWORD","value":"19_Ijrfgij_72"},
+        {"name":"SPRING_DATASOURCE_DRIVER_CLASS_NAME","value":"org.postgresql.Driver"},
+
+        {"name":"SPRING_FLYWAY_URL","value":"jdbc:postgresql://praxe-postgres.c5myo8wessez.eu-central-1.rds.amazonaws.com:5432/postgres"},
+        {"name":"SPRING_FLYWAY_USER","value":"appuser"},
+        {"name":"SPRING_FLYWAY_PASSWORD","value":"19_Ijrfgij_72"},
+
+        {"name":"SPRING_JPA_HIBERNATE_DDL_AUTO","value":"none"},
+        {"name":"SPRING_JPA_OPEN_IN_VIEW","value":"false"}
+      ]
+    }
+  ]
+}
