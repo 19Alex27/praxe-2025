@@ -1,0 +1,10 @@
+name: .github/workflows/ci-probe.yml
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo CI-PROBE OK on ${{ github.ref }} by ${{ github.actor }}
