@@ -1,4 +1,4 @@
-name: ci-probe
+name: .github/workflows/ci-probe.yml
 on:
   pull_request:
     branches: [main]
